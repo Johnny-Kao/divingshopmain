@@ -55,7 +55,7 @@ npm run dev
    - 配置以下構建設置：
      - 框架預設：Next.js
      - 構建命令：`npm run build`
-     - 構建輸出目錄：`.next`
+     - 構建輸出目錄：`out`
      - Node.js 版本：18.x
      - 環境變量：
        ```
