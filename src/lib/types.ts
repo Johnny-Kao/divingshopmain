@@ -22,6 +22,7 @@ export interface DiveShop {
   ad_priority?: number;
   is_five_star?: boolean;
   average_rating?: number;
+  review_count?: number;
 }
 
 export interface FilterState {
