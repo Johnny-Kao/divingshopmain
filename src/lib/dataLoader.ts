@@ -63,7 +63,7 @@ export function filterDiveShops(
           // 简单的按国家排序，实际项目中可能需要更复杂的距离计算
           return a.country.localeCompare(b.country);
         case 'popular':
-          return b.review_count - a.review_count;
+          return (b.review_count ?? 0) - (a.review_count ?? 0);
         case 'a-z':
         default:
           return a.name.localeCompare(b.name);

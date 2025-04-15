@@ -23,6 +23,7 @@ export interface DiveShop {
   is_five_star?: boolean;
   average_rating?: number;
   review_count?: number;
+  last_review_date?: string | null;
 }
 
 export interface FilterState {
