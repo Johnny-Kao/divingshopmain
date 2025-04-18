@@ -1,29 +1,27 @@
 export interface DiveShop {
   id: string;
   name: string;
-  certifications: string[];
   country: string;
-  region: string;
   city: string;
-  description: string;
-  rating: number;
-  reviews: number;
-  address: string;
-  phone: string;
-  email: string;
-  website: string;
-  featuredImage: string;
-  images: string[];
-  sponsored: boolean;
-  coordinates?: [number, number];
-  createdAt: string;
-  updatedAt: string;
+  certifications: string[];
+  rating: number | null;
+  is_five_star: boolean;
   tags: string[];
-  ad_priority?: number;
-  is_five_star?: boolean;
-  average_rating?: number;
-  review_count?: number;
-  last_review_date?: string | null;
+  website: string;
+  instagram: string;
+  email: string;
+  ad_priority: number;
+  recommended_tags: string[];
+  review_count: number;
+  average_rating: number | null;
+  last_review_date: string | null;
+  background?: {
+    '800x800': string;
+    origin?: string | null;
+  };
+  openHour?: string;
+  languages?: string[];
+  activities?: string[];
 }
 
 export interface FilterState {
@@ -56,89 +54,87 @@ export const COUNTRIES: Record<string, string[]> = {
 
 export const SORT_OPTIONS: Record<string, string> = {
   'a-z': '名稱 A-Z',
-  'z-a': '名稱 Z-A',
   'highest-rated': '最高評分',
   'distance': '距離',
-  'popular': '最多評論'
+  'popular': '最受歡迎'
 };
 
 // 國家代碼映射
-export const COUNTRY_MAPPING: Record<string, { code: string, english: string }> = {
-  // 東南亞
-  '泰國': { code: 'th', english: 'Thailand' },
-  '印尼': { code: 'id', english: 'Indonesia' },
-  '馬來西亞': { code: 'my', english: 'Malaysia' },
-  '菲律賓': { code: 'ph', english: 'Philippines' },
-  '新加坡': { code: 'sg', english: 'Singapore' },
-  '越南': { code: 'vn', english: 'Vietnam' },
-  '緬甸': { code: 'mm', english: 'Myanmar' },
-  '柬埔寨': { code: 'kh', english: 'Cambodia' },
-  
-  // 東亞
-  '中國': { code: 'cn', english: 'China' },
-  '日本': { code: 'jp', english: 'Japan' },
-  '韓國': { code: 'kr', english: 'South Korea' },
-  '台灣': { code: 'tw', english: 'Taiwan' },
-  '香港': { code: 'hk', english: 'Hong Kong' },
-  
-  // 南亞
-  '印度': { code: 'in', english: 'India' },
-  '斯里蘭卡': { code: 'lk', english: 'Sri Lanka' },
-  '馬爾代夫': { code: 'mv', english: 'Maldives' },
-  
-  // 大洋洲
-  '澳大利亞': { code: 'au', english: 'Australia' },
-  '新西蘭': { code: 'nz', english: 'New Zealand' },
-  '斐濟': { code: 'fj', english: 'Fiji' },
-  '帛琉': { code: 'pw', english: 'Palau' },
-  
-  // 中東
-  '埃及': { code: 'eg', english: 'Egypt' },
-  '阿聯酋': { code: 'ae', english: 'UAE' },
-  '以色列': { code: 'il', english: 'Israel' },
-  '約旦': { code: 'jo', english: 'Jordan' },
-  '阿曼': { code: 'om', english: 'Oman' },
-  
-  // 歐洲
-  '西班牙': { code: 'es', english: 'Spain' },
-  '意大利': { code: 'it', english: 'Italy' },
-  '希臘': { code: 'gr', english: 'Greece' },
-  '克羅地亞': { code: 'hr', english: 'Croatia' },
-  '法國': { code: 'fr', english: 'France' },
-  '葡萄牙': { code: 'pt', english: 'Portugal' },
-  '英國': { code: 'gb', english: 'UK' },
-  '德國': { code: 'de', english: 'Germany' },
-  '荷蘭': { code: 'nl', english: 'Netherlands' },
-  '挪威': { code: 'no', english: 'Norway' },
-  '瑞典': { code: 'se', english: 'Sweden' },
-  '芬蘭': { code: 'fi', english: 'Finland' },
-  '冰島': { code: 'is', english: 'Iceland' },
-  '馬耳他': { code: 'mt', english: 'Malta' },
-  
-  // 北美洲
-  '美國': { code: 'us', english: 'USA' },
-  '加拿大': { code: 'ca', english: 'Canada' },
-  '墨西哥': { code: 'mx', english: 'Mexico' },
-  '古巴': { code: 'cu', english: 'Cuba' },
-  '巴拿馬': { code: 'pa', english: 'Panama' },
-  '牙買加': { code: 'jm', english: 'Jamaica' },
-  '巴哈馬': { code: 'bs', english: 'Bahamas' },
-  '開曼群島': { code: 'ky', english: 'Cayman Islands' },
-  
-  // 南美洲
-  '巴西': { code: 'br', english: 'Brazil' },
-  '哥倫比亞': { code: 'co', english: 'Colombia' },
-  '厄瓜多爾': { code: 'ec', english: 'Ecuador' },
-  '秘魯': { code: 'pe', english: 'Peru' },
-  '智利': { code: 'cl', english: 'Chile' },
-  '阿根廷': { code: 'ar', english: 'Argentina' },
-  
-  // 非洲
-  '南非': { code: 'za', english: 'South Africa' },
-  '坦桑尼亞': { code: 'tz', english: 'Tanzania' },
-  '肯尼亞': { code: 'ke', english: 'Kenya' },
-  '莫桑比克': { code: 'mz', english: 'Mozambique' },
-  '塞舌爾': { code: 'sc', english: 'Seychelles' }
+export const COUNTRY_MAPPING: { [key: string]: { code: string; name: string } } = {
+  'Thailand': { code: 'TH', name: '泰國' },
+  'Philippines': { code: 'PH', name: '菲律賓' },
+  'Malaysia': { code: 'MY', name: '馬來西亞' },
+  'Indonesia': { code: 'ID', name: '印尼' },
+  'Vietnam': { code: 'VN', name: '越南' },
+  'Cambodia': { code: 'KH', name: '柬埔寨' },
+  'Singapore': { code: 'SG', name: '新加坡' },
+  'Japan': { code: 'JP', name: '日本' },
+  'South Korea': { code: 'KR', name: '韓國' },
+  'Taiwan': { code: 'TW', name: '台灣' },
+  'Hong Kong': { code: 'HK', name: '香港' },
+  'Macau': { code: 'MO', name: '澳門' },
+  'China': { code: 'CN', name: '中國' },
+  'Australia': { code: 'AU', name: '澳大利亞' },
+  'New Zealand': { code: 'NZ', name: '紐西蘭' },
+  'Fiji': { code: 'FJ', name: '斐濟' },
+  'Maldives': { code: 'MV', name: '馬爾代夫' },
+  'Sri Lanka': { code: 'LK', name: '斯里蘭卡' },
+  'India': { code: 'IN', name: '印度' },
+  'Nepal': { code: 'NP', name: '尼泊爾' },
+  'Turkey': { code: 'TR', name: '土耳其' },
+  'Egypt': { code: 'EG', name: '埃及' },
+  'South Africa': { code: 'ZA', name: '南非' },
+  'Kenya': { code: 'KE', name: '肯亞' },
+  'Tanzania': { code: 'TZ', name: '坦桑尼亞' },
+  'Morocco': { code: 'MA', name: '摩洛哥' },
+  'Spain': { code: 'ES', name: '西班牙' },
+  'France': { code: 'FR', name: '法國' },
+  'Italy': { code: 'IT', name: '意大利' },
+  'Greece': { code: 'GR', name: '希臘' },
+  'Croatia': { code: 'HR', name: '克羅地亞' },
+  'Portugal': { code: 'PT', name: '葡萄牙' },
+  'Malta': { code: 'MT', name: '馬耳他' },
+  'Cyprus': { code: 'CY', name: '塞浦路斯' },
+  'United Kingdom': { code: 'GB', name: '英國' },
+  'Ireland': { code: 'IE', name: '愛爾蘭' },
+  'Iceland': { code: 'IS', name: '冰島' },
+  'Norway': { code: 'NO', name: '挪威' },
+  'Sweden': { code: 'SE', name: '瑞典' },
+  'Finland': { code: 'FI', name: '芬蘭' },
+  'Denmark': { code: 'DK', name: '丹麥' },
+  'Germany': { code: 'DE', name: '德國' },
+  'Netherlands': { code: 'NL', name: '荷蘭' },
+  'Belgium': { code: 'BE', name: '比利時' },
+  'Switzerland': { code: 'CH', name: '瑞士' },
+  'Austria': { code: 'AT', name: '奧地利' },
+  'Czech Republic': { code: 'CZ', name: '捷克' },
+  'Poland': { code: 'PL', name: '波蘭' },
+  'Hungary': { code: 'HU', name: '匈牙利' },
+  'Romania': { code: 'RO', name: '羅馬尼亞' },
+  'Bulgaria': { code: 'BG', name: '保加利亞' },
+  'United States': { code: 'US', name: '美國' },
+  'Canada': { code: 'CA', name: '加拿大' },
+  'Mexico': { code: 'MX', name: '墨西哥' },
+  'Brazil': { code: 'BR', name: '巴西' },
+  'Argentina': { code: 'AR', name: '阿根廷' },
+  'Chile': { code: 'CL', name: '智利' },
+  'Peru': { code: 'PE', name: '秘魯' },
+  'Colombia': { code: 'CO', name: '哥倫比亞' },
+  'Venezuela': { code: 'VE', name: '委內瑞拉' },
+  'Costa Rica': { code: 'CR', name: '哥斯達黎加' },
+  'Panama': { code: 'PA', name: '巴拿馬' },
+  'Cuba': { code: 'CU', name: '古巴' },
+  'Jamaica': { code: 'JM', name: '牙買加' },
+  'Bahamas': { code: 'BS', name: '巴哈馬' },
+  'Dominican Republic': { code: 'DO', name: '多米尼加' },
+  'Puerto Rico': { code: 'PR', name: '波多黎各' },
+  'Cayman Islands': { code: 'KY', name: '開曼群島' },
+  'Bermuda': { code: 'BM', name: '百慕大' },
+  'Seychelles': { code: 'SC', name: '塞舌爾' },
+  'Mauritius': { code: 'MU', name: '毛里求斯' },
+  'Madagascar': { code: 'MG', name: '馬達加斯加' },
+  'Mozambique': { code: 'MZ', name: '莫桑比克' },
+  'Zanzibar': { code: 'TZ', name: '桑給巴爾' }
 };
 
 // 标签类型定义
